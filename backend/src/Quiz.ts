@@ -1,4 +1,4 @@
-import { IoManager } from './managers/IoManager';
+import { IoManager } from "./managers/IoManager";
 
 interface User {
   id: string;
@@ -14,6 +14,15 @@ interface Problem {
     id: number;
     title: string;
   };
+  submissions: Submission[]
+}
+
+interface Submission {
+  problemId: string;
+  submission: string;
+  userId: string;
+  isCorrect: boolean;
+  optionSelected: string;
 }
 
 export class Quiz {
@@ -38,7 +47,7 @@ export class Quiz {
   start() {
     this.hasStarted = true;
     const io = IoManager.getIo();
-    io.emit('CHANGE_PROBLEM', {
+    io.emit("CHANGE_PROBLEM", {
       problem: this.problems[0],
     });
   }
@@ -48,19 +57,19 @@ export class Quiz {
     const problem = this.problems[this.activeProblems];
     const io = IoManager.getIo();
     if (problem) {
-      io.emit('CHANGE_PROBLEM', {
+      io.emit("CHANGE_PROBLEM", {
         problem,
       });
     } else {
-      io.emit('QUIZ_END', {
+      io.emit("QUIZ_END", {
         problem,
       });
     }
   }
 
   createRandomString(length: number) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
     for (let i = 0; i < length; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }

@@ -1,5 +1,5 @@
-import { Quiz } from '../Quiz';
-import { IoManager } from './IoManager';
+import { Quiz } from "../Quiz";
+import { IoManager } from "./IoManager";
 
 export class QuizManager {
   private quizzes: Quiz[];
@@ -17,11 +17,15 @@ export class QuizManager {
 
   public next(roomId: string) {
     const io = IoManager.getIo();
-    io.to(roomId).emit('START_ROOM');
+    io.to(roomId).emit("START_ROOM");
   }
 
   public addUser(roomId: string, name: string) {
     return this.getQuiz(roomId)?.addUser(name);
+  }
+
+  public submit(roomId: string, submission: 0 | 1 | 2 | 3) {
+
   }
 
   public getQuiz(roomId: string) {
