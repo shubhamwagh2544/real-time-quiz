@@ -1,16 +1,16 @@
 {
-  "name": "real-time-quiz",
-  "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
-  "scripts": {
-    "dev": "tsc -b && node dist/index.js",
-    "format": "prettier --write ."
-  },
-  "keywords": [],
-  "author": "Shubham Wagh",
-  "license": "ISC",
-  "dependencies": {
-    "socket.io": "^4.7.5"
-  }
+    "name": "real-time-quiz",
+    "version": "1.0.0",
+    "description": "",
+    "main": "dist/index.js",
+    "scripts": {
+        "dev": "tsc -b && node dist/index.js",
+        "format": "prettier --write ."
+    },
+    "keywords": [],
+    "author": "Shubham Wagh",
+    "license": "ISC",
+    "dependencies": {
+        "socket.io": "^4.7.5"
+    }
 }

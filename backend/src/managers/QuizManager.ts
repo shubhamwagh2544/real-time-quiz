@@ -1,34 +1,83 @@
-import { Quiz } from "../Quiz";
-import { IoManager } from "./IoManager";
+import { AllowedSubmissions, Quiz } from '../Quiz';
+import { IoManager } from './IoManager';
+
+let globalProblemId = 0;
 
 export class QuizManager {
-  private quizzes: Quiz[];
+    private quizzes: Quiz[];
 
-  constructor() {
-    this.quizzes = [];
-  }
+    constructor() {
+        this.quizzes = [];
+    }
 
-  public start(roomId: string) {
-    const io = IoManager.getIo();
-    const quiz = this.quizzes.find((quiz) => quiz.roomId === roomId);
-    if (!quiz) return;
-    quiz.start();
-  }
+    start(roomId: string) {
+        const quiz = this.getQuiz(roomId);
+        if (!quiz) {
+            console.log('quiz not found');
+            return;
+        }
+        quiz.start();
+    }
 
-  public next(roomId: string) {
-    const io = IoManager.getIo();
-    io.to(roomId).emit("START_ROOM");
-  }
+    addProblem(
+        roomId: string,
+        problem: {
+            title: string;
+            description: string;
+            image: string;
+            options: {
+                id: number;
+                title: string;
+            }[];
+            answer: AllowedSubmissions;
+        }
+    ) {
+        const quiz = this.getQuiz(roomId);
+        if (!quiz) {
+            console.log('quiz not found');
+            return;
+        }
+        quiz.addProblem({
+            ...problem,
+            id: (globalProblemId++).toString(),
+            startTime: new Date().getTime(),
+            submissions: [],
+            option: { id: 0, title: 'test option' },
+        });
+    }
 
-  public addUser(roomId: string, name: string) {
-    return this.getQuiz(roomId)?.addUser(name);
-  }
+    next(roomId: string) {
+        const quiz = this.getQuiz(roomId);
+        if (!quiz) {
+            console.log('quiz not found');
+            return;
+        }
+        quiz.next();
+    }
 
-  public submit(roomId: string, submission: 0 | 1 | 2 | 3) {
+    addUser(roomId: string, name: string) {
+        return this.getQuiz(roomId)?.addUser(name);
+    }
 
-  }
+    submit(userId: string, roomId: string, problemId: string, submission: 0 | 1 | 2 | 3) {
+        this.getQuiz(roomId)?.submit(userId, roomId, problemId, submission);
+    }
 
-  public getQuiz(roomId: string) {
-    return this.quizzes.find((quiz) => quiz.roomId === roomId) ?? null;
-  }
+    getQuiz(roomId: string) {
+        return this.quizzes.find((quiz) => quiz.roomId === roomId) ?? null;
+    }
+
+    getCurrentState(roomId: string) {
+        const quiz = this.quizzes.find((x) => x.roomId === roomId);
+        if (!quiz) {
+            console.log('quiz not found');
+            return;
+        }
+        return quiz.getCurrentState();
+    }
+
+    addQuiz(roomId: string) {
+        const quiz = new Quiz(roomId);
+        this.quizzes.push(quiz);
+    }
 }

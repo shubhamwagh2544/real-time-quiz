@@ -1,15 +1,15 @@
-import http from "http";
-import { Server } from "socket.io";
+import http from 'http';
+import { Server } from 'socket.io';
 
 const server = http.createServer();
 
 export class IoManager {
-  private static io: Server;
+    private static io: Server;
 
-  public static getIo() {
-    if (!this.io) {
-      this.io = new Server(server);
+    static getIo() {
+        if (!this.io) {
+            this.io = new Server(server);
+        }
+        return this.io;
     }
-    return this.io;
-  }
 }
